@@ -1,0 +1,7 @@
+.idea
+vendor/
+infection.log
+infection.phar
+infection.phar.asc
+.phpunit.result.cache
+composer.lock
