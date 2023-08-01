@@ -30,9 +30,9 @@ infection.phar:
 	wget --no-check-certificate "https://github.com/infection/infection/releases/download/$(INFECTION_VERSION)/infection.phar.asc"
 	chmod +x infection.phar
 
-infection: infection.phar test-server run-infection kill-test-server
+infection: infection.phar run-infection
 
-infection-ci: INFECTION_ARGS=--logger-github --git-diff-filter=AM
+infection-ci: INFECTION_ARGS=--logger-github --git-diff-filter=AM --min-msi=80
 infection-ci: INFECTION_VERSION=0.23.0
 infection-ci: infection
 
