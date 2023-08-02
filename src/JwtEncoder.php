@@ -70,10 +70,14 @@ final class JwtEncoder
     /**
      * Decode the JWT string
      *
-     * @param mixed|ClaimsInterface $payload Payload to encode. If ClaimsInterface is used, {@see ClaimsInterface::toJson()} will be used to encode the payload.
-     * @param JWKSet $keySet Keys to use
-     * @param string $algorithm Algorithm to use
-     * @param string|null $kid Key ID to use. If null, the first key matching the algorithm will be used
+     * @param mixed|ClaimsInterface $payload Payload to encode. If ClaimsInterface is used,
+     *                                       {@see ClaimsInterface::toJson()} will be used to encode the payload.
+     * @param JWKSet|EncodingOptions $options Options to use for encoding.
+     *                                        Can be a JWKSet for use legacy method signature.
+     * @param string $algorithm Algorithm to use.
+     *                          Deprecated: use EncodingOptions instead.
+     * @param string|null $kid Key ID to use. If null, the first key matching the algorithm will be used.
+     *                         Deprecated: use EncodingOptions instead.
      *
      * @return string The encoded JWT
      *
@@ -81,7 +85,7 @@ final class JwtEncoder
      * @psalm-suppress NullArgument
      * @psalm-suppress TooManyArguments
      */
-    public function encode($payload, JWKSet $keySet, string $algorithm = 'RS256', ?string $kid = null): string
+    public function encode($payload, $options, string $algorithm = 'RS256', ?string $kid = null): string
     {
         static $isLegacyJwsBuilder = null;
 
@@ -97,27 +101,17 @@ final class JwtEncoder
             : new JWSBuilder($manager)
         ;
 
-        $key = $keySet->selectKey(
-            'sig',
-            $manager->get($algorithm),
-            $kid ? ['kid' => $kid] : []
-        );
-
-        if (!$key) {
-            throw new InvalidArgumentException('Cannot found any valid key');
+        if ($options instanceof JWKSet) {
+            $options = new EncodingOptions($options, $algorithm, $kid);
         }
 
-        $sigHeader = ['alg' => $algorithm];
-
-        if ($kid) {
-            $sigHeader['kid'] = $kid;
-        }
+        $key = $options->selectSignatureKey($this->jwa);
 
         $payload = $payload instanceof ClaimsInterface ? $payload->toJson() : json_encode($payload);
 
         $jws = $jwsBuilder->create()
             ->withPayload($payload)
-            ->addSignature($key, $sigHeader)
+            ->addSignature($key, $options->headers())
             ->build()
         ;
 
