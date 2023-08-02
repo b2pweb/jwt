@@ -105,7 +105,6 @@ final class JwtDecoder
             throw new InvalidArgumentException('Invalid JWT payload');
         }
 
-        /** @psalm-suppress PossiblyNullArgument */
         return new JWT(
             $jwt,
             $signature->getProtectedHeader() + $signature->getHeader(),

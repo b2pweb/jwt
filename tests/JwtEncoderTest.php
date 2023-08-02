@@ -2,6 +2,7 @@
 
 namespace B2pweb\Jwt\Tests;
 
+use B2pweb\Jwt\Claims;
 use B2pweb\Jwt\JWA;
 use B2pweb\Jwt\JwtDecoder;
 use B2pweb\Jwt\JwtEncoder;
@@ -46,6 +47,24 @@ class JwtEncoderTest extends TestCase
         ]));
 
         $this->assertSame(['foo' => 'bar'], $jwt->payload());
+        $this->assertSame(['alg' => 'RS256'], $jwt->headers());
+    }
+
+    public function test_encode_with_claims_object()
+    {
+        $token = $this->encoder->encode(
+            new Claims(['foo' => 'http://foo.bar']),
+            new JWKSet([
+                JWKFactory::createFromKeyFile($this->privateKey, null, ['use' => 'sig', 'alg' => 'RS256']),
+            ])
+        );
+
+        $decoder = new JwtDecoder();
+        $jwt = $decoder->decode($token, new JWKSet([
+            JWKFactory::createFromKeyFile($this->publicKey, null, ['use' => 'sig', 'alg' => 'RS256']),
+        ]));
+
+        $this->assertSame(['foo' => 'http://foo.bar'], $jwt->payload());
         $this->assertSame(['alg' => 'RS256'], $jwt->headers());
     }
 

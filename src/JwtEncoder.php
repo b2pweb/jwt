@@ -70,7 +70,7 @@ final class JwtEncoder
     /**
      * Decode the JWT string
      *
-     * @param mixed $payload Payload to encode
+     * @param mixed|ClaimsInterface $payload Payload to encode. If ClaimsInterface is used, {@see ClaimsInterface::toJson()} will be used to encode the payload.
      * @param JWKSet $keySet Keys to use
      * @param string $algorithm Algorithm to use
      * @param string|null $kid Key ID to use. If null, the first key matching the algorithm will be used
@@ -113,8 +113,10 @@ final class JwtEncoder
             $sigHeader['kid'] = $kid;
         }
 
+        $payload = $payload instanceof ClaimsInterface ? $payload->toJson() : json_encode($payload);
+
         $jws = $jwsBuilder->create()
-            ->withPayload(json_encode($payload))
+            ->withPayload($payload)
             ->addSignature($key, $sigHeader)
             ->build()
         ;

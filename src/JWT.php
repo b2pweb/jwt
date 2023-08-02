@@ -5,7 +5,7 @@ namespace B2pweb\Jwt;
 /**
  * Store the parsed JWT data
  */
-final class JWT
+final class JWT extends Claims
 {
     /**
      * Raw encoded payload of the JWT
@@ -22,25 +22,18 @@ final class JWT
     private $headers;
 
     /**
-     * The payload
-     * Should be array|string for handle wrapped JWT (i.e. JWS into a JWE)
-     *
-     * @var array
-     */
-    private $payload;
-
-    /**
      * JWT constructor.
      *
      * @param string $encoded
      * @param array $headers
-     * @param array $payload
+     * @param array<string, mixed> $payload
      */
     public function __construct(string $encoded, array $headers, array $payload)
     {
+        parent::__construct($payload);
+
         $this->encoded = $encoded;
         $this->headers = $headers;
-        $this->payload = $payload;
     }
 
     /**
@@ -70,6 +63,6 @@ final class JWT
      */
     public function payload(): array
     {
-        return $this->payload;
+        return $this->toArray();
     }
 }
