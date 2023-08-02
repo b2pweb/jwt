@@ -119,6 +119,16 @@ final class EncodingOptions
     }
 
     /**
+     * Get the configured JWKS
+     *
+     * @return JWKSet
+     */
+    public function keySet(): JWKSet
+    {
+        return $this->keySet;
+    }
+
+    /**
      * Try to select a signature key
      *
      * @param JWA $algorithms The supported algorithms

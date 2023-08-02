@@ -29,13 +29,14 @@ class EncodingOptionsTest extends TestCase
 
     public function test_getter_setter()
     {
-        $options = new EncodingOptions(new JWKSet([
+        $options = new EncodingOptions($jwks = new JWKSet([
             JWKFactory::createFromKeyFile($this->privateKey, null, ['use' => 'sig', 'alg' => 'RS256']),
         ]));
 
         $this->assertSame('RS256', $options->algorithm());
         $this->assertNull($options->kid());
         $this->assertSame(['alg' => 'RS256'], $options->headers());
+        $this->assertSame($jwks, $options->keySet());
 
         $options
             ->setAlgorithm('RS512')
