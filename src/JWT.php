@@ -2,6 +2,14 @@
 
 namespace B2pweb\Jwt;
 
+use Base64Url\Base64Url;
+use InvalidArgumentException;
+
+use function count;
+use function explode;
+use function is_array;
+use function json_decode;
+
 /**
  * Store the parsed JWT data
  */
@@ -64,5 +72,33 @@ final class JWT extends Claims
     public function payload(): array
     {
         return $this->toArray();
+    }
+
+    /**
+     * Raw decode a JWT token, without any validation
+     * This method is unsafe, on should be used only if key cannot be resolved yet
+     *
+     * @param string $jwt The JWT string
+     *
+     * @return JWT The decoded JWT
+     *
+     * @see JwtDecoder::decode() For a safe decoding
+     */
+    public static function fromJwtUnsafe(string $jwt): JWT
+    {
+        $parts = explode('.', $jwt);
+
+        if (count($parts) !== 3) {
+            throw new InvalidArgumentException('Invalid JWT');
+        }
+
+        $headers = json_decode(Base64Url::decode($parts[0]), true);
+        $payload = json_decode(Base64Url::decode($parts[1]), true);
+
+        if (!is_array($headers) || !is_array($payload)) {
+            throw new InvalidArgumentException('Invalid JWT');
+        }
+
+        return new JWT($jwt, $headers, $payload);
     }
 }

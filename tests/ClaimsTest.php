@@ -14,6 +14,10 @@ class ClaimsTest extends TestCase
 
         $this->assertTrue(isset($claims['foo']));
         $this->assertSame('bar', $claims['foo']);
+        $this->assertSame('bar', $claims->claim('foo'));
+        $this->assertSame('bar', $claims->claim('foo', 'zzz'));
+        $this->assertNull($claims->claim('a'));
+        $this->assertSame('zzz', $claims->claim('a', 'zzz'));
 
         $claims['foo'] = 'baz';
         $this->assertSame('baz', $claims['foo']);

@@ -84,4 +84,17 @@ class Claims implements ClaimsInterface
     {
         unset($this->claims[$offset]);
     }
+
+    /**
+     * Get a claim value
+     *
+     * @param string $name The claim name
+     * @param mixed $default The default value to use when the claim is not defined
+     *
+     * @return mixed The claim value
+     */
+    final public function claim(string $name, $default = null)
+    {
+        return $this->claims[$name] ?? $default;
+    }
 }
