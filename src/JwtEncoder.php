@@ -60,11 +60,11 @@ final class JwtEncoder
      */
     public function supportedAlgorithms(array $algorithms): self
     {
-        $decoder = clone $this;
+        $encoder = clone $this;
 
-        $decoder->jwa = $decoder->jwa->filter($algorithms);
+        $encoder->jwa = $encoder->jwa->filter($algorithms);
 
-        return $decoder;
+        return $encoder;
     }
 
     /**
