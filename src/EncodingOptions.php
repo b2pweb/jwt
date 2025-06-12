@@ -141,7 +141,7 @@ final class EncodingOptions
         $key = $this->keySet->selectKey(
             'sig',
             $algorithms->manager()->get($this->algorithm),
-            $this->kid ? ['kid' => $this->kid] : []
+            $this->kid !== null ? ['kid' => $this->kid] : []
         );
 
         if (!$key) {
@@ -161,7 +161,7 @@ final class EncodingOptions
         $headers = $this->headers;
         $headers['alg'] = $this->algorithm;
 
-        if ($this->kid) {
+        if ($this->kid !== null) {
             $headers['kid'] = $this->kid;
         }
 

@@ -8,7 +8,7 @@ use ArrayAccess;
  * Base type for storing claims
  * Use this interface to customize the claims serialization
  *
- * @implements ArrayAccess<string, mixed>
+ * @extends ArrayAccess<string, mixed>
  */
 interface ClaimsInterface extends ArrayAccess
 {
