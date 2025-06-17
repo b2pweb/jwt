@@ -69,6 +69,7 @@ jobs:
       run: make psalm-ci
 
     - name: Run Infection
+      if: github.event_name == 'pull_request'
       run: |
         git fetch --depth=1 origin $GITHUB_BASE_REF
         make infection-ci
