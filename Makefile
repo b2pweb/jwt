@@ -32,7 +32,7 @@ infection.phar:
 
 infection: infection.phar run-infection
 
-infection-ci: INFECTION_ARGS=--logger-github --git-diff-base=origin/${GITHUB_BASE_REF:-$GITHUB_REF_NAME} --git-diff-filter=AM --min-msi=80
+infection-ci: INFECTION_ARGS=--logger-github --git-diff-base=origin/${GITHUB_BASE_REF:-${GITHUB_REF_NAME}} --git-diff-filter=AM --min-msi=80
 infection-ci: INFECTION_VERSION=0.29.14
 infection-ci: infection
 
