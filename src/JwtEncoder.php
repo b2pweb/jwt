@@ -87,6 +87,7 @@ final class JwtEncoder
      */
     public function encode($payload, $options, string $algorithm = 'RS256', ?string $kid = null): string
     {
+        /** @var bool|null $isLegacyJwsBuilder */
         static $isLegacyJwsBuilder = null;
 
         if ($isLegacyJwsBuilder === null) {

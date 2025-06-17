@@ -1,7 +1,7 @@
 ROOT_DIR=$(shell pwd)/
 TESTDIR=$(ROOT_DIR)/tests
 PHPUNIT=vendor/bin/phpunit
-INFECTION_VERSION=0.15.3
+INFECTION_VERSION=0.29.14
 INFECTION_ARGS=
 
 all: install tests
@@ -32,8 +32,8 @@ infection.phar:
 
 infection: infection.phar run-infection
 
-infection-ci: INFECTION_ARGS=--logger-github --git-diff-filter=AM --min-msi=80
-infection-ci: INFECTION_VERSION=0.23.0
+infection-ci: INFECTION_ARGS=--logger-github --git-diff-base=origin/${GITHUB_BASE_REF} --git-diff-filter=AM --min-msi=80
+infection-ci: INFECTION_VERSION=0.29.14
 infection-ci: infection
 
 phpcs:
@@ -41,5 +41,21 @@ phpcs:
 
 run-infection: infection.phar
 	./infection.phar $(INFECTION_ARGS)
+
+php81_shell:
+	docker-compose -f docker-compose.php81.yaml build
+	docker-compose -f docker-compose.php81.yaml  run php bash
+
+php82_shell:
+	docker-compose -f docker-compose.php82.yaml build
+	docker-compose -f docker-compose.php82.yaml  run php bash
+
+php83_shell:
+	docker-compose -f docker-compose.php83.yaml build
+	docker-compose -f docker-compose.php83.yaml  run php bash
+
+php84_shell:
+	docker-compose -f docker-compose.php84.yaml build
+	docker-compose -f docker-compose.php84.yaml  run php bash
 
 .PHONY: tests test-server clean install infection infection-ci psalm psalm-ci phpcs

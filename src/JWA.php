@@ -123,7 +123,7 @@ final class JWA
      */
     public function hashAlgorithm(string $alg): string
     {
-        if (empty($this->enabled[$alg]) || empty($this->algMap[$alg]['hash'])) {
+        if (empty($this->enabled[$alg]) || !isset($this->algMap[$alg]['hash'])) {
             throw new InvalidArgumentException('Unsupported alg "' . $alg . '"');
         }
 
@@ -223,7 +223,7 @@ final class JWA
     {
         $this->algMap[$alg] = ['class' => $class, 'type' => $type];
 
-        if ($hash) {
+        if ($hash !== null) {
             $this->algMap[$alg]['hash'] = $hash;
         }
     }
