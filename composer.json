@@ -19,9 +19,10 @@
             "email": "vquatrevieux@b2pweb.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "php": "~8.1.0 | ~8.2.0 | ~8.3.0 | ~8.4.0",
+        "php": "~8.1.0 | ~8.2.0 | ~8.3.0 | ~8.4.0 | ~8.5.0",
         "ext-json": "*",
         "spomky-labs/base64url": "~2.0",
         "web-token/jwt-library": "~3.0|~4.0"
